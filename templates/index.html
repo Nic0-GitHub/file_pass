@@ -16,19 +16,11 @@
     </div>
 
     <h2>Subir Archivo</h2>
-    <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
-        <input type="file" name="file">
-        <input type="submit" value="Subir">
-    </form>
-
-    <h2>O arrastra un archivo aquí</h2>
     <div id="drop_zone">
         <div id="drop_zone_icon">📁</div>
         Arrastra archivos aquí
     </div>
-
     <div id="toast">Archivo recibido correctamente</div>
-
     <script>
         var dropZone = document.getElementById('drop_zone');
         var dropZoneIcon = document.getElementById('drop_zone_icon');
