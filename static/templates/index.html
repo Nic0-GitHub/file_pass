@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FILE PASS</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/basics.css')}}">
+    
+</head>
+<body>
+    <h1>Archivos!</h1>
+    <div class="file-flex">
+        {% for path in files %}
+            <a href="./download/{{path}}">{{path}}</a>
+        {% endfor %}
+    </div>
+
+    <h2>Subir Archivo</h2>
+    <div id="drop_zone">
+        <div id="drop_zone_icon">📁</div>
+        Arrastra archivos aquí
+    </div>
+    <div id="toast">Archivo recibido correctamente</div>
+
+    <script src="{{url_for('static', filename='js/index.js')}}"></script>
+</body>
+</html>

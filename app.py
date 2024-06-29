@@ -6,18 +6,16 @@ from sys import argv
 from flask import Flask, abort, render_template, send_file, request, redirect, url_for
 import toml
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='./static/templates')
 FILES_DIR = './files'
 UPLOAD_DIR = './download'
 LOGS_DIR = './logs'
-IPS_FILE = open("./ips.toml", 'r+')
 
 # Crear directorios si no existen
 os.makedirs(FILES_DIR, exist_ok=True)
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(LOGS_DIR, exist_ok=True)
 
-ips_emotes = toml.load(IPS_FILE)
 
 
 
@@ -45,20 +43,7 @@ def upload_file():
     if file.filename == '':
         return redirect(url_for('index'))
 
-    emote = ips_emotes.get(request.remote_addr)
-    if not emote:
-        emotes:list[str] = ips_emotes.get('emotes')
-        emote = choice(emotes)
-        emotes.remove(emote)
-        ips_emotes['emotes'] = emotes
-        ips_emotes[request.remote_addr] = emote
-        toml.dump(ips_emotes, open(IPS_FILE.name, 'w'))
-    app.logger.info(f"{emote} upload '{file.filename}'")
-        
-    if file:
-        safe_filename = os.path.basename(file.filename)
-        file.save(os.path.join(UPLOAD_DIR, safe_filename))
-        return redirect(url_for('index'))
+
 
 if __name__ == '__main__':
     port_selected = int(argv[1]) if len(argv) > 1 else 5000
