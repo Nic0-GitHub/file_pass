@@ -1,12 +1,8 @@
-import logging
-from logging.handlers import RotatingFileHandler
 import os
 from random import choice
 from sys import argv
 from flask import Flask, abort, render_template, send_file, request, redirect, url_for
 from utils import  get_files
-import toml
-
 
 app = Flask(__name__, template_folder='./static/templates')
 FILES_DIR = './files'
@@ -14,9 +10,9 @@ UPLOAD_DIR = './download'
 LOGS_DIR = './logs'
 
 # Crear directorios si no existen
-os.makedirs(FILES_DIR, exist_ok=True)
+os.makedirs(FILES_DIR,  exist_ok=True)
 os.makedirs(UPLOAD_DIR, exist_ok=True)
-os.makedirs(LOGS_DIR, exist_ok=True)
+os.makedirs(LOGS_DIR,   exist_ok=True)
 
 @app.route('/')
 def index():
@@ -51,7 +47,6 @@ def upload_files():
         safe_filename = os.path.basename(file.filename)
         file.save(os.path.join(UPLOAD_DIR, safe_filename))
         return redirect(url_for('index'))
-
 
 if __name__ == '__main__':
     port_selected = int(argv[1]) if len(argv) > 1 else 5000
