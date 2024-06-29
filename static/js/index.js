@@ -51,7 +51,6 @@ function showToast(message) {
     setTimeout(function() { toast.className = toast.className.replace('show', ''); }, 3000);
 }
 
-
 function filterFiles() {
     const input = document.getElementById('file-search-input').value.toLowerCase();
     const fileList = document.getElementById('file-list');

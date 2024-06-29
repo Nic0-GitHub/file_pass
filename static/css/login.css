@@ -1,4 +1,3 @@
-/* Estilos para el formulario de inicio de sesión con tema oscuro */
 
 body {
     font-family: Arial, sans-serif;
@@ -11,6 +10,7 @@ body {
 .container {
     display: flex;
     justify-content: center;
+    flex-direction: column-reverse;
     align-items: center;
     height: 100vh;
 }
@@ -62,4 +62,18 @@ body {
 
 .login-button:hover {
     background-color: #007bff;
+}
+
+.flash-message {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 400px;
+    background-color: #444;
+    color: #f4f4f4;
+}
+
+.flash-message.error {
+    background-color: #ff4d4d;
+    color: #fff;
 }

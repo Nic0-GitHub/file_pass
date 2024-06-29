@@ -10,8 +10,12 @@ UPLOAD_DIR = './download'
 LOGS_DIR = './logs'
 app = Flask(__name__, template_folder='./static/templates')
 app.secret_key = 'tu_clave_secreta_aqui'
+
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+
 users = {'1': User('1', 'admin', 'password')}
 
 # Crear directorios si no existen
@@ -69,7 +73,7 @@ def login():
             login_user(user)
             return redirect(url_for('index'))
         else:
-            flash('Nombre de usuario o contraseña incorrectos')
+            flash('Nombre de usuario o contraseña incorrectos', 'error')
     return render_template('login.html')
 
 @app.route('/logout')
@@ -77,7 +81,6 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index'))
-
 
 
 if __name__ == '__main__':
