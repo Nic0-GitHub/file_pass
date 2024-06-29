@@ -13,6 +13,14 @@ h1 {
     color: #4da3ff;
 }
 
+.file-flex {
+    display: grid;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+}
+
 .file-button {
     display: block;
     padding: 10px;
@@ -22,6 +30,9 @@ h1 {
     text-decoration: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .file-button:hover {
@@ -29,12 +40,6 @@ h1 {
     color: #1f1b1b;
 }
 
-.file-flex {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    flex-wrap: wrap;
-}
 
 #drop_zone {
     border: 2px dashed #606060;
@@ -97,4 +102,28 @@ h1 {
 @keyframes fadeout {
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
+}
+
+@media (min-width: 1200px) {
+    .file-flex {
+        grid-template-columns: repeat(10, 1fr); /* Máximo de 10 archivos por fila */
+    }
+}
+
+@media (max-width: 1199px) and (min-width: 992px) {
+    .file-flex {
+        grid-template-columns: repeat(8, 1fr); /* Máximo de 8 archivos por fila */
+    }
+}
+
+@media (max-width: 991px) and (min-width: 768px) {
+    .file-flex {
+        grid-template-columns: repeat(6, 1fr); /* Máximo de 6 archivos por fila */
+    }
+}
+
+@media (max-width: 767px) {
+    .file-flex {
+        grid-template-columns: repeat(4, 1fr); /* Máximo de 4 archivos por fila */
+    }
 }

@@ -4,7 +4,9 @@ import os
 from random import choice
 from sys import argv
 from flask import Flask, abort, render_template, send_file, request, redirect, url_for
+from utils import  get_files
 import toml
+
 
 app = Flask(__name__, template_folder='./static/templates')
 FILES_DIR = './files'
@@ -16,16 +18,17 @@ os.makedirs(FILES_DIR, exist_ok=True)
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(LOGS_DIR, exist_ok=True)
 
-
-
-
 @app.route('/')
 def index():
     try:
-        files = [f for f in os.listdir(FILES_DIR) if os.path.isfile(os.path.join(FILES_DIR, f))]
+        files = get_files(FILES_DIR)
+        download_files = get_files(UPLOAD_DIR)
+        files.sort()
+        download_files.sort()
     except FileNotFoundError:
         files = []
-    return render_template('index.html', files=files)
+        download_files = []
+    return render_template('index.html', files=files, download_files = download_files)
 
 @app.route('/download/<filename>', methods=['GET'])
 def download_file(filename):
@@ -35,7 +38,8 @@ def download_file(filename):
     return send_file(safe_path, as_attachment=True)
 
 @app.route('/upload', methods=['POST'])
-def upload_file():
+def upload_files():
+    
     if 'file' not in request.files:
         return redirect(url_for('index'))
     

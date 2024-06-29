@@ -31,7 +31,7 @@ dropZone.addEventListener('drop', function(e) {
     }
 
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', "{{ url_for('upload_file') }}", true);
+    xhr.open('POST', "./upload", true);
 
     xhr.onload = function() {
         if (xhr.status === 200) {
