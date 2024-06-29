@@ -1,22 +1,39 @@
-import os
-from sys import argv
+import logging
+from flask.logging import default_handler
 from flask import Flask, abort, flash, render_template, send_file, request, redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from utils import  get_files
+from utils import  get_files, get_users_from_json, stream_handler, file_handler
 from classes import User
+from sys import argv
+import os
 
+# CONST
 FILES_DIR = './files'
 UPLOAD_DIR = './download'
 LOGS_DIR = './logs'
+
+# app
 app = Flask(__name__, template_folder='./static/templates')
 app.secret_key = 'tu_clave_secreta_aqui'
 
+# app-logger
+app.logger.addHandler(stream_handler)
+app.logger.addHandler(file_handler)
+app.logger.setLevel(logging.INFO)
+
+app.logger.removeHandler(default_handler)
+werkzeug_logger = logging.getLogger('werkzeug')
+werkzeug_logger.disabled = True
+
+# auth
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-
-users = {'1': User('1', 'admin', 'password')}
+# auth-data
+users_json = get_users_from_json()
+users: dict[str, User] = { str(user['id']): User(**user) for user in users_json['users'] }
+groups = users_json.get('groups')
 
 # Crear directorios si no existen
 os.makedirs(FILES_DIR,  exist_ok=True)
@@ -25,6 +42,7 @@ os.makedirs(LOGS_DIR,   exist_ok=True)
 
 @app.route('/')
 def index():
+    app.logger.info("Esto esta todo bien!")
     try:
         files = get_files(FILES_DIR)
         download_files = get_files(UPLOAD_DIR)
@@ -68,7 +86,9 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user = next((user for user in users.values() if user.username == username and user.password == password), None)
+        user = next((
+            user for user in users.values() 
+                if user.username == username and user.password == password), None)
         if user:
             login_user(user)
             return redirect(url_for('index'))
