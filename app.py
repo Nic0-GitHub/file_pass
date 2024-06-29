@@ -42,9 +42,13 @@ os.makedirs(FILES_DIR,  exist_ok=True)
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(LOGS_DIR,   exist_ok=True)
 
+def info(*args, **kwargs):
+    return app.logger.info(*args, **kwargs)
+
+
 @app.route('/')
 def index():
-    app.logger.info(f"{request.remote_addr} requested: '{request.url}'({request.method})")
+    info(f"{request.remote_addr} requested: '{request.url}'({request.method})")
     try:
         files = get_files(FILES_DIR)
         download_files = get_files(UPLOAD_DIR)
@@ -58,7 +62,7 @@ def index():
 @app.route('/download/<filename>', methods=['GET'])
 @login_required
 def download_file(filename):
-    app.logger.info(f"{request.remote_addr} requested: '{request.url}'({request.method})")
+    info(f"{request.remote_addr} requested: '{request.url}'({request.method})")
     safe_path = os.path.join(FILES_DIR, filename)
     if not os.path.isfile(safe_path):
         abort(404, description="Archivo no encontrado")
@@ -67,7 +71,7 @@ def download_file(filename):
 @app.route('/upload', methods=['POST'])
 @login_required
 def upload_files():
-    app.logger.info(f"{request.remote_addr} requested: '{request.url}'({request.method})")
+    info(f"{request.remote_addr} requested: '{request.url}'({request.method})")
     if 'file' not in request.files:
         return redirect(url_for('index'))
     
@@ -95,7 +99,7 @@ def login():
                 if user.username == username and user.password == password), None)
         if user:
             login_user(user)
-            app.logger.info(f"{request.remote_addr} started a session with user '{user.username}'")
+            info(f"{request.remote_addr} started a session with user '{user.username}'")
             return redirect(url_for('index'))
         else:
             flash('Nombre de usuario o contraseña incorrectos', 'error')
