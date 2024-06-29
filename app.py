@@ -1,13 +1,18 @@
 import os
-from random import choice
 from sys import argv
-from flask import Flask, abort, render_template, send_file, request, redirect, url_for
+from flask import Flask, abort, flash, render_template, send_file, request, redirect, url_for
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from utils import  get_files
+from classes import User
 
-app = Flask(__name__, template_folder='./static/templates')
 FILES_DIR = './files'
 UPLOAD_DIR = './download'
 LOGS_DIR = './logs'
+app = Flask(__name__, template_folder='./static/templates')
+app.secret_key = 'tu_clave_secreta_aqui'
+login_manager = LoginManager()
+login_manager.init_app(app)
+users = {'1': User('1', 'admin', 'password')}
 
 # Crear directorios si no existen
 os.makedirs(FILES_DIR,  exist_ok=True)
@@ -27,6 +32,7 @@ def index():
     return render_template('index.html', files=files, download_files = download_files)
 
 @app.route('/download/<filename>', methods=['GET'])
+@login_required
 def download_file(filename):
     safe_path = os.path.join(FILES_DIR, filename)
     if not os.path.isfile(safe_path):
@@ -34,6 +40,7 @@ def download_file(filename):
     return send_file(safe_path, as_attachment=True)
 
 @app.route('/upload', methods=['POST'])
+@login_required
 def upload_files():
     
     if 'file' not in request.files:
@@ -47,6 +54,31 @@ def upload_files():
         safe_filename = os.path.basename(file.filename)
         file.save(os.path.join(UPLOAD_DIR, safe_filename))
         return redirect(url_for('index'))
+
+@login_manager.user_loader
+def load_user(user_id):
+    return users.get(user_id)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = next((user for user in users.values() if user.username == username and user.password == password), None)
+        if user:
+            login_user(user)
+            return redirect(url_for('index'))
+        else:
+            flash('Nombre de usuario o contraseña incorrectos')
+    return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+
 
 if __name__ == '__main__':
     port_selected = int(argv[1]) if len(argv) > 1 else 5000
