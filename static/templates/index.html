@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="no">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,9 +10,13 @@
 </head>
 <body>
     <h1>Archivos!</h1>
-    <div class="file-flex">
+    <form id="search-form" action="" method="GET" onsubmit="return false;">
+        <label for="file-search-input">Nombre archivo</label>
+        <input type="text" name="file-search" id="file-search-input" oninput="filterFiles()">
+    </form>
+    <div class="file-flex" id="file-list">
         {% for path in files %}
-            <a href="./download/{{path}}">{{path}}</a>
+            <a class="file-button" href="./download/{{path}}">{{path}}</a>
         {% endfor %}
     </div>
 
@@ -22,7 +26,6 @@
         Arrastra archivos aquí
     </div>
     <div id="toast">Archivo recibido correctamente</div>
-
     <script src="{{url_for('static', filename='js/index.js')}}"></script>
 </body>
 </html>

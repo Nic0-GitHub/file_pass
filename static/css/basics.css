@@ -1,18 +1,19 @@
-
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: #1e1e1e;
+    color: #f4f4f4;
     margin: 0;
     padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+
 h1 {
-    color: #0056b3;
+    color: #4da3ff;
 }
-a {
+
+.file-button {
     display: block;
     padding: 10px;
     margin: 5px 0;
@@ -22,16 +23,21 @@ a {
     border-radius: 5px;
     transition: background-color 0.3s ease;
 }
-a:hover {
-    background-color: #d4d4d4;
+
+.file-button:hover {
+    background-color: #ddd1d1;
+    color: #1f1b1b;
 }
+
 .file-flex {
     display: flex;
+    flex-direction: row;
     gap: 10px;
     flex-wrap: wrap;
 }
+
 #drop_zone {
-    border: 2px dashed #cccccc;
+    border: 2px dashed #606060;
     width: 300px;
     height: 200px;
     text-align: center;
@@ -40,19 +46,22 @@ a:hover {
     margin-top: 20px;
     position: relative;
 }
+
 #drop_zone.dragover {
-    background-color: #f0f0f0;
-    border-color: #0056b3;
+    background-color: #3a3a3a;
+    border-color: #4da3ff;
 }
+
 #drop_zone_icon {
     font-size: 48px;
     color: #cccccc;
 }
+
 #toast {
     visibility: hidden;
     min-width: 250px;
     margin-left: -125px;
-    background-color: #333;
+    background-color: #4a6070;
     color: #fff;
     text-align: center;
     border-radius: 2px;
@@ -63,23 +72,28 @@ a:hover {
     bottom: 30px;
     font-size: 17px;
 }
+
 #toast.show {
     visibility: visible;
     -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
     animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
+
 @-webkit-keyframes fadein {
     from {bottom: 0; opacity: 0;}
     to {bottom: 30px; opacity: 1;}
 }
+
 @keyframes fadein {
     from {bottom: 0; opacity: 0;}
     to {bottom: 30px; opacity: 1;}
 }
+
 @-webkit-keyframes fadeout {
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
 }
+
 @keyframes fadeout {
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}

@@ -23,14 +23,14 @@ dropZone.addEventListener('drop', function(e) {
     dropZone.classList.remove('dragover');
     dropZoneIcon.textContent = '📁';
 
-    var files = e.dataTransfer.files;
-    var formData = new FormData();
+    let files = e.dataTransfer.files;
+    let formData = new FormData();
 
-    for (var i = 0; i < files.length; i++) {
+    for (let i = 0; i < files.length; i++) {
         formData.append('file', files[i]);
     }
 
-    var xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
     xhr.open('POST', "{{ url_for('upload_file') }}", true);
 
     xhr.onload = function() {
@@ -49,4 +49,20 @@ function showToast(message) {
     toast.textContent = message;
     toast.className = 'show';
     setTimeout(function() { toast.className = toast.className.replace('show', ''); }, 3000);
+}
+
+
+function filterFiles() {
+    const input = document.getElementById('file-search-input').value.toLowerCase();
+    const fileList = document.getElementById('file-list');
+    const files = fileList.getElementsByClassName('file-button');
+
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file.textContent.toLowerCase().includes(input)) {
+            file.style.display = "";
+        } else {
+            file.style.display = "none";
+        }
+    }
 }
