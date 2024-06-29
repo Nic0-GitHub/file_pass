@@ -9,14 +9,14 @@
     
 </head>
 <body>
-    <h1>Archivos!</h1>
+    <h1>Archivos en la API!</h1>
     <form id="search-form" class="search-form" action="" method="GET" onsubmit="return false;">
         <label class="search-label" for="file-search-input">Nombre archivo</label>
         <input class="search-input" type="text" name="file-search" id="file-search-input" oninput="filterFiles()">
     </form>
     <div class="file-flex" id="file-list">
         {% for path in files %}
-            <a class="file-button" href="./download/{{path}}">{{path}}</a>
+            <a class="file-button" href ="./download/{{path}}">{{path}}</a>
         {% endfor %}
     </div>
 
