@@ -3,14 +3,16 @@ from flask.logging import default_handler
 from flask import Flask, abort, flash, render_template, send_file, request, redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from utils import  get_files, get_users_from_json, stream_handler, file_handler
+from dotenv import load_dotenv
 from classes import User
 from sys import argv
 import os
 
 # CONST
-FILES_DIR = './files'
-UPLOAD_DIR = './download'
-LOGS_DIR = './logs'
+load_dotenv('.env')
+FILES_DIR = os.getenv("FILES_DIR", './files')
+UPLOAD_DIR = os.getenv("UPLOAD_DIR", './download')
+LOGS_DIR = os.getenv("LOGS_DIR", './logs')
 
 # app
 app = Flask(__name__, template_folder='./static/templates')
@@ -42,7 +44,7 @@ os.makedirs(LOGS_DIR,   exist_ok=True)
 
 @app.route('/')
 def index():
-    app.logger.info("Esto esta todo bien!")
+    app.logger.info(f"{request.remote_addr} requested: '{request.url}'({request.method})")
     try:
         files = get_files(FILES_DIR)
         download_files = get_files(UPLOAD_DIR)
@@ -51,11 +53,12 @@ def index():
     except FileNotFoundError:
         files = []
         download_files = []
-    return render_template('index.html', files=files, download_files = download_files)
+    return render_template('index.html', files=files, download_files=download_files)
 
 @app.route('/download/<filename>', methods=['GET'])
 @login_required
 def download_file(filename):
+    app.logger.info(f"{request.remote_addr} requested: '{request.url}'({request.method})")
     safe_path = os.path.join(FILES_DIR, filename)
     if not os.path.isfile(safe_path):
         abort(404, description="Archivo no encontrado")
@@ -64,7 +67,7 @@ def download_file(filename):
 @app.route('/upload', methods=['POST'])
 @login_required
 def upload_files():
-    
+    app.logger.info(f"{request.remote_addr} requested: '{request.url}'({request.method})")
     if 'file' not in request.files:
         return redirect(url_for('index'))
     
@@ -75,6 +78,7 @@ def upload_files():
     if file:
         safe_filename = os.path.basename(file.filename)
         file.save(os.path.join(UPLOAD_DIR, safe_filename))
+        app.logger.info(f"{request.remote_addr} upload '{safe_filename}'")
         return redirect(url_for('index'))
 
 @login_manager.user_loader
@@ -91,6 +95,7 @@ def login():
                 if user.username == username and user.password == password), None)
         if user:
             login_user(user)
+            app.logger.info(f"{request.remote_addr} started a session with user '{user.username}'")
             return redirect(url_for('index'))
         else:
             flash('Nombre de usuario o contraseña incorrectos', 'error')
@@ -101,7 +106,6 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index'))
-
 
 if __name__ == '__main__':
     port_selected = int(argv[1]) if len(argv) > 1 else 5000
