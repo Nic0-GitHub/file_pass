@@ -46,7 +46,11 @@ def upload_files():
     file = request.files['file']
     if file.filename == '':
         return redirect(url_for('index'))
-
+    
+    if file:
+        safe_filename = os.path.basename(file.filename)
+        file.save(os.path.join(UPLOAD_DIR, safe_filename))
+        return redirect(url_for('index'))
 
 
 if __name__ == '__main__':

@@ -40,6 +40,34 @@ h1 {
     color: #1f1b1b;
 }
 
+.search-form {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.search-label {
+    margin-bottom: 5px;
+    margin-right: 10px;
+    color: #ccc;
+    font-size: 1.3em;
+}
+
+.search-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 250px;
+    max-width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #4da3ff;
+}
 
 #drop_zone {
     border: 2px dashed #606060;
