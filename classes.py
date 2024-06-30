@@ -1,7 +1,16 @@
 from pathlib import Path
 from flask_login import UserMixin
+from constants import *
+from enum import Enum
 import os.path
-from utils import DOWNLOAD_DIR, UPLOAD_DIR, ICONS_DIR, get_files
+
+class FileTypes(Enum):
+    CODE = 1
+    IMAGE = 2
+    VIDEO = 3
+    DOCUMENT = 4
+    COMPRESS = 5
+    AUDIO = 6
 
 class User(UserMixin):
     def __init__(self, id, username, password):
@@ -18,6 +27,7 @@ class ProvidedItem():
         self.name = self.path.name
         self.raw_name = self.path.stem
         self.ext = self.path.suffix
+        self.file_type = self.select_file_type()
         self.icon = self.select_icon()
 
     def validate_path(self) -> None:
@@ -27,6 +37,28 @@ class ProvidedItem():
                 (Path(UPLOAD_DIR) / self.path).exists()):
             raise FileNotFoundError(f"El archivo no se encuentra en la ruta especificada: {self.path}")
 
+    def select_file_type(self) -> FileTypes:
+        ext_to_type = {
+            '.c': FileTypes.CODE, '.py': FileTypes.CODE, '.cpp': FileTypes.CODE, 
+            '.java': FileTypes.CODE, '.js': FileTypes.CODE, '.ts': FileTypes.CODE, 
+            '.php': FileTypes.CODE, '.rb': FileTypes.CODE, '.go': FileTypes.CODE, 
+            '.rs': FileTypes.CODE, '.css': FileTypes.CODE, '.png': FileTypes.IMAGE, 
+            '.jpg': FileTypes.IMAGE, '.jpeg': FileTypes.IMAGE, '.gif': FileTypes.IMAGE, 
+            '.bmp': FileTypes.IMAGE, '.svg': FileTypes.IMAGE, '.mp4': FileTypes.VIDEO, 
+            '.mkv': FileTypes.VIDEO, '.flv': FileTypes.VIDEO, '.avi': FileTypes.VIDEO, 
+            '.mov': FileTypes.VIDEO, '.txt': FileTypes.DOCUMENT, '.doc': FileTypes.DOCUMENT, 
+            '.docx': FileTypes.DOCUMENT, '.xls': FileTypes.DOCUMENT, '.xlsx': FileTypes.DOCUMENT, 
+            '.ppt': FileTypes.DOCUMENT, '.pptx': FileTypes.DOCUMENT, '.pdf': FileTypes.DOCUMENT, 
+            '.zip': FileTypes.COMPRESS, '.tar': FileTypes.COMPRESS, '.rar': FileTypes.COMPRESS, 
+            '.tar.gz': FileTypes.COMPRESS, '.bz2': FileTypes.COMPRESS, '.mp3': FileTypes.AUDIO, 
+            '.wav': FileTypes.AUDIO, '.aac': FileTypes.AUDIO, '.flac': FileTypes.AUDIO, 
+            '.ogg': FileTypes.AUDIO, '.wma': FileTypes.AUDIO
+        }
+        
+        file_ext = self.ext.lower()
+        for file_type, extensions in ext_to_type.items():
+            if file_ext in extensions:
+                return file_type
 
     def select_icon(self) -> str:
         if self.path.is_dir():

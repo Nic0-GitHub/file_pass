@@ -1,9 +1,10 @@
 import logging
-from flask.logging import default_handler
 from flask import Flask, abort, flash, render_template, send_file, request, redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from utils import  DOWNLOAD_DIR, LOGS_DIR, UPLOAD_DIR, get_files, get_users_from_json, stream_handler, file_handler
-from classes import ProvidedItem, User
+from flask.logging import default_handler
+from utils import get_files, get_users_from_json, group_provided_items_by_type, stream_handler, file_handler
+from constants import *
+from classes import FileTypes, ProvidedItem, User
 from sys import argv
 import os
 
@@ -41,12 +42,13 @@ def index():
     try:
         files_in_uploads = get_files(UPLOAD_DIR)
         files_in_downloads = sorted(get_files(DOWNLOAD_DIR))
-        providedItems = map(lambda fi: ProvidedItem(fi), files_in_downloads)
+        provided_items = list(map(lambda fi: ProvidedItem(fi), files_in_downloads))
+        grouped_provided_items = group_provided_items_by_type(provided_items)
         files_in_uploads.sort()
     except FileNotFoundError:
-        files_in_downloads = []
+        grouped_provided_items = {file_type: [] for file_type in FileTypes}
         files_in_uploads = []
-    return render_template('index.html', providedItems=providedItems, upload_files=files_in_uploads)
+    return render_template('index.html', grouped_provided_items=grouped_provided_items, upload_files=files_in_uploads)
 
 @app.route('/download/<filename>', methods=['GET'])
 @login_required

@@ -2,19 +2,9 @@ from logging import Formatter, FileHandler, StreamHandler
 import os, shutil
 from dotenv import load_dotenv
 import json
+from classes import FileTypes, ProvidedItem
+from constants import *
 
-load_dotenv('.env')
-USERS_FILE = os.getenv('USERS_FILE', './users.json')
-USERS_FILE_EXAMPLE = os.getenv('USERS_FILE_EXAMPLE', './users.example.json')
-LOGS_DIR = os.getenv('LOGS_DIR', './logs')
-UPLOAD_DIR = os.getenv("UPLOAD_DIR", './upload')
-DOWNLOAD_DIR = os.getenv("DOWNLOAD_DIR", './download')
-ICONS_DIR = os.getenv("ICONS_DIR", './icons')
-
-# Crear directorios si no existen
-os.makedirs(UPLOAD_DIR,   exist_ok=True)
-os.makedirs(DOWNLOAD_DIR, exist_ok=True)
-os.makedirs(LOGS_DIR,     exist_ok=True)
 
 
 def get_users_from_json(users_file: str = USERS_FILE) -> dict:
@@ -36,6 +26,18 @@ def get_files(dir:str, with_path=False) -> list[str]:
         return []
     return ret
 
+def group_provided_items_by_type(provided_items: list[ProvidedItem]) -> dict[FileTypes, list[ProvidedItem]]:
+    grouped_items = {
+        FileTypes.CODE: [],
+        FileTypes.IMAGE: [],
+        FileTypes.VIDEO: [],
+        FileTypes.DOCUMENT: [],
+        FileTypes.COMPRESS: [],
+        FileTypes.AUDIO: []
+    }
+    for item in provided_items:
+        grouped_items[item.file_type].append(item)
+    return grouped_items
 
 # Logger
 bsc_formatter = Formatter("[%(levelname)s] -> [%(asctime)s]: %(message)s", '%d/%m/%Y %H:%M')

@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FILE PASS</title>
     <link rel="stylesheet" href="{{url_for('static', filename='css/basics.css')}}">
-    
 </head>
 <body>
     <h1>Archivos en la API!</h1>
@@ -14,12 +13,20 @@
         <label class="search-label" for="file-search-input">Nombre archivo</label>
         <input class="search-input" type="text" name="file-search" id="file-search-input" oninput="filterFiles()">
     </form>
+
     <div class="file-flex" id="file-list">
-        {% for providedItem in providedItems %}
-            <a class="file-button" href ="./download/{{providedItem.path}}">
-                <img class="file-icon" src="{{url_for('static', filename='icons/'+providedItem.icon)}}" alt="{{providedItem.name}}">
-                {{providedItem.name}}
-            </a>
+        {% for file_type, items in grouped_provided_items.items() %}
+            {% if items %}
+                <h2>{{ file_type.name }}</h2>
+                <div class="file-type-section">
+                    {% for providedItem in items %}
+                        <a class="file-button" href ="./download/{{ providedItem.path }}">
+                            <img class="file-icon" src="{{ url_for('static', filename='icons/' + providedItem.icon) }}" alt="{{ providedItem.name }}">
+                            {{ providedItem.name }}
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
         {% endfor %}
     </div>
 
@@ -30,12 +37,13 @@
     
     <div>
         <h3>Archivos en Download</h3>
-            <ul>
-                {% for name in upload_files %}
-                    <li>{{name}}</li>
-                {% endfor %}
-            </ul>
+        <ul>
+            {% for name in upload_files %}
+                <li>{{ name }}</li>
+            {% endfor %}
+        </ul>
     </div>
+
     <div id="toast">Archivo recibido correctamente</div>
     <script src="{{url_for('static', filename='js/index.js')}}"></script>
 </body>
