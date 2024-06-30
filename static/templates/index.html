@@ -14,22 +14,26 @@
         <input class="search-input" type="text" name="file-search" id="file-search-input" oninput="filterFiles()">
     </form>
 
-    <div class="file-flex" id="file-list">
+    <ul class="file-flex" id="file-list">
         {% for file_type, items in grouped_provided_items.items() %}
-            {% if items %}
+            <li class="file-type-section">
                 <h2>{{ file_type.name }}</h2>
-                <div class="file-type-section">
-                    {% for providedItem in items %}
-                        <a class="file-button" href ="./download/{{ providedItem.path }}">
+                <div class="file-buttons-container">
+                    {% if items %}
+                        {% for providedItem in items %}
+                        <a class="file-button" href="./download/{{ providedItem.path }}">
                             <img class="file-icon" src="{{ url_for('static', filename='icons/' + providedItem.icon) }}" alt="{{ providedItem.name }}">
                             {{ providedItem.name }}
                         </a>
-                    {% endfor %}
+                        {% endfor %}
+                    {% else %}
+                        <p>NO HAY ARCHIVOS</p>
+                    {% endif %}
                 </div>
-            {% endif %}
+            </li>
         {% endfor %}
-    </div>
-
+    </ul>
+    
     <h2>Subir Archivo</h2>
     <div id="drop_zone">
         <div id="drop_zone_icon">📁</div>

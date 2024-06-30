@@ -48,6 +48,7 @@ def index():
     except FileNotFoundError:
         grouped_provided_items = {file_type: [] for file_type in FileTypes}
         files_in_uploads = []
+        
     return render_template('index.html', grouped_provided_items=grouped_provided_items, upload_files=files_in_uploads)
 
 @app.route('/download/<filename>', methods=['GET'])
