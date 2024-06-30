@@ -2,17 +2,11 @@ import logging
 from flask.logging import default_handler
 from flask import Flask, abort, flash, render_template, send_file, request, redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from utils import  get_files, get_users_from_json, stream_handler, file_handler
-from dotenv import load_dotenv
-from classes import User
+from utils import  DOWNLOAD_DIR, LOGS_DIR, UPLOAD_DIR, get_files, get_users_from_json, stream_handler, file_handler
+from classes import ProvidedItem, User
 from sys import argv
 import os
 
-# CONST
-load_dotenv('.env')
-FILES_DIR = os.getenv("FILES_DIR", './files')
-UPLOAD_DIR = os.getenv("UPLOAD_DIR", './download')
-LOGS_DIR = os.getenv("LOGS_DIR", './logs')
 
 # app
 app = Flask(__name__, template_folder='./static/templates')
@@ -37,11 +31,6 @@ users_json = get_users_from_json()
 users: dict[str, User] = { str(user['id']): User(**user) for user in users_json['users'] }
 groups = users_json.get('groups')
 
-# Crear directorios si no existen
-os.makedirs(FILES_DIR,  exist_ok=True)
-os.makedirs(UPLOAD_DIR, exist_ok=True)
-os.makedirs(LOGS_DIR,   exist_ok=True)
-
 def info(*args, **kwargs):
     return app.logger.info(*args, **kwargs)
 
@@ -50,23 +39,24 @@ def info(*args, **kwargs):
 def index():
     info(f"{request.remote_addr} requested: '{request.url}'({request.method})")
     try:
-        files = get_files(FILES_DIR)
-        download_files = get_files(UPLOAD_DIR)
-        files.sort()
-        download_files.sort()
+        files_in_uploads = get_files(UPLOAD_DIR)
+        files_in_downloads = sorted(get_files(DOWNLOAD_DIR))
+        providedItems = map(lambda fi: ProvidedItem(fi), files_in_downloads)
+        files_in_uploads.sort()
     except FileNotFoundError:
-        files = []
-        download_files = []
-    return render_template('index.html', files=files, download_files=download_files)
+        files_in_downloads = []
+        files_in_uploads = []
+    return render_template('index.html', providedItems=providedItems, upload_files=files_in_uploads)
 
 @app.route('/download/<filename>', methods=['GET'])
 @login_required
 def download_file(filename):
     info(f"{request.remote_addr} requested: '{request.url}'({request.method})")
-    safe_path = os.path.join(FILES_DIR, filename)
+    safe_path = os.path.join(DOWNLOAD_DIR, filename)
     if not os.path.isfile(safe_path):
         abort(404, description="Archivo no encontrado")
     return send_file(safe_path, as_attachment=True)
+
 
 @app.route('/upload', methods=['POST'])
 @login_required

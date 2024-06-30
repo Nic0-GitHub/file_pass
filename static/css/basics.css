@@ -36,9 +36,17 @@ h1 {
 }
 
 .file-button:hover {
-    background-color: #ddd1d1;
-    color: #1f1b1b;
+    background-color: #382323;
+    color: #972d2d;
 }
+
+.file-icon {
+    width: 48px;
+    height: 48px;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
 
 .search-form {
     margin-top: 20px;
@@ -134,13 +142,13 @@ h1 {
 
 @media (min-width: 1200px) {
     .file-flex {
-        grid-template-columns: repeat(10, 1fr); /* Máximo de 10 archivos por fila */
+        grid-template-columns: repeat(5, 1fr); /* Máximo de 10 archivos por fila */
     }
 }
 
 @media (max-width: 1199px) and (min-width: 992px) {
     .file-flex {
-        grid-template-columns: repeat(8, 1fr); /* Máximo de 8 archivos por fila */
+        grid-template-columns: repeat(4, 1fr); /* Máximo de 8 archivos por fila */
     }
 }
 
