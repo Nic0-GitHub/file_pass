@@ -55,10 +55,7 @@ class ProvidedItem():
             '.ogg': FileTypes.AUDIO, '.wma': FileTypes.AUDIO
         }
         
-        file_ext = self.ext.lower()
-        for file_type, extensions in ext_to_type.items():
-            if file_ext in extensions:
-                return file_type
+        return ext_to_type.get(self.ext, FileTypes.DOCUMENT)
 
     def select_icon(self) -> str:
         if self.path.is_dir():

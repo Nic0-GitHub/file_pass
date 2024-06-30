@@ -42,7 +42,7 @@ def index():
     try:
         files_in_uploads = get_files(UPLOAD_DIR)
         files_in_downloads = sorted(get_files(DOWNLOAD_DIR))
-        provided_items = list(map(lambda fi: ProvidedItem(fi), files_in_downloads))
+        provided_items = list(map(ProvidedItem, files_in_downloads))
         grouped_provided_items = group_provided_items_by_type(provided_items)
         files_in_uploads.sort()
     except FileNotFoundError:
