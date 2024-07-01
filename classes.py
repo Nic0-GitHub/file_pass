@@ -75,3 +75,12 @@ class ProvidedItem():
             if file_ext in extensions:
                 return icon
         return 'default.png'
+    
+    def __str__(self):
+        t = f"""path: {self.path.resolve()}\nname: {self.name}\nicon: {self.icon}"""
+        
+        return t
+
+
+if __name__ == '__main__':
+    pass
