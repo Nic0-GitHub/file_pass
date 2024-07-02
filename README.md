@@ -1,66 +1,53 @@
-# Gestor de Archivos con Flask
+# File Manager with Flask
+This project is a simple web application developed using Flask to manage files. It allows users to upload files to the server, download existing files, and view the list of available files.
 
-Este proyecto es una aplicación web simple desarrollada con Flask para gestionar archivos. Permite a los usuarios subir archivos al servidor, descargar archivos existentes y ver la lista de archivos disponibles.
+## Features
+- **File Upload:** Users can upload files to the server, which are stored in the download folder.
+- **File Download:** Files stored in the file folder can be downloaded by users.
+- **Web Interface:** Uses Flask to generate a web interface where users can interact with the files.
+- **User administration:** Uses a configurable users file for only authorized sessions
 
-## Características
-
-- **Subida de Archivos:** Los usuarios pueden subir archivos al servidor, que se almacenarán en la carpeta de descargas.
-- **Descarga de Archivos:** Los archivos almacenados en la carpeta de archivos pueden ser descargados por los usuarios.
-- **Interfaz Web:** Utiliza Flask para generar una interfaz web donde los usuarios pueden interactuar con los archivos.
-
-## Requisitos Previos
-
+## Prerequisites
 - Python 3.x
 - Flask (`pip install Flask`)
 
-## Estructura del Proyecto
+## Project Structure
+├── app.py
+├── classes.py
+├── constants.py
+├── download # folder for files to be downloaded
+├── logs     # folder for system logs
+├── upload   # folder for files to be uploaded
+├── users.example.json
+├── users.json # users allowed in the system
+├── utils.py
 
-project/
-│
-├── app.py # Archivo principal de la aplicación Flask
-├── static/
-│ ├── templates/ # Plantillas HTML
-│ │ └── index.html # Plantilla principal para la interfaz de usuario
-│ ├── css/
-│ │ └── basics.css # Hoja de estilos CSS para la interfaz
-│ └── js/
-│ └── index.js # Archivo JavaScript para la interfaz interactiva
-│
-├── files/ # Carpeta donde se almacenan los archivos subidos
-├── download/ # Carpeta donde se almacenan los archivos disponibles para descarga
-└── logs/ # Carpeta donde se pueden almacenar registros de la aplicación
+## Configuration
+1. **Directory Setup:**
+   - The application uses the following directories to store files:
+     - `download/`: To store files available for download.
+     - `upload/`: To store files uploaded by users.
+     - `logs/`: Optionally, to store application logs.
 
-
-## Configuración
-
-1. **Configuración de Directorios:**
-   - La aplicación utiliza los siguientes directorios para almacenar archivos:
-     - `files/`: Para almacenar archivos subidos por los usuarios.
-     - `download/`: Para almacenar archivos disponibles para descarga.
-     - `logs/`: Opcionalmente, para almacenar registros de la aplicación.
-
-2. **Instalación de Dependencias:**
-   - Instala Flask si aún no lo tienes instalado:
+2. **Installing Dependencies:**
+   - Install Flask and other dependencies if not already installed:
      ```
-     pip install Flask
+     pip install -r requirements.txt
      ```
 
-## Uso
-
-1. **Ejecutar la Aplicación:**
-   - Desde la línea de comandos, ejecuta el archivo `app.py` para iniciar el servidor Flask:
+## Usage
+1. **Running the Application:**
+   - From the command line, run the `app.py` file to start the Flask server:
      ```
-     python app.py <puerto> <modo_debug>
+     python app.py <port> <debug_mode>
      ```
-     - `<puerto>`: Puerto en el que se ejecutará la aplicación (por defecto 5000).
-     - `<modo_debug>`: Modo de depuración (0 para desactivado, 1 para activado).
+     - `<port>`: Port on which the application will run (default is 5000).
+     - `<debug_mode>`: Debug mode (0 for off, 1 for on).
 
-2. **Interactuar con la Aplicación:**
-   - Abre un navegador web y accede a `http://localhost:<puerto>` para ver la interfaz de usuario.
-   - Sube archivos utilizando el formulario provisto.
-   - Descarga archivos haciendo clic en los enlaces de descarga disponibles.
+2. **Interacting with the Application:**
+   - Open a web browser and go to `http://localhost:<port>` to view the user interface.
+   - Upload files using the provided form.
+   - Download files by clicking on the available download links.
 
-
-## Créditos
-
-Desarrollado por Nicolas Agustín Pieroni
+## Credits
+Developed by Nicolas Agustín Pieroni
