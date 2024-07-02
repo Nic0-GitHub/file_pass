@@ -16,19 +16,18 @@
         <input class="search-input" type="text" name="file-search" id="file-search-input" oninput="filterFiles()">
     </form>
     {% include 'provideditemslist.html' %}
-    <h2>Subir Archivo</h2>
+    <h2>upload file</h2>
     <div id="drop_zone">
         <div id="drop_zone_icon">📁</div>
     </div>
     <div>
-        <h3>Archivos en Download</h3>
+        <h3>files in download</h3>
         <ul>
             {% for name in upload_files %}
                 <li>{{ name }}</li>
             {% endfor %}
         </ul>
     </div>
-    <div id="toast">Archivo recibido correctamente</div>
     <script src="{{url_for('static', filename='js/index.js')}}"></script>
 </body>
 </html>
