@@ -6,23 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FILE PASS</title>
     <link rel="stylesheet" href="{{url_for('static', filename='css/basics.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/index.css')}}">
 </head>
 <body>
     {% include 'navbar.html' %}
-    
     <h1>Archivos en la API!</h1>
     <form id="search-form" class="search-form" action="" method="GET" onsubmit="return false;">
         <label class="search-label" for="file-search-input">Nombre archivo</label>
         <input class="search-input" type="text" name="file-search" id="file-search-input" oninput="filterFiles()">
     </form>
-
     {% include 'provideditemslist.html' %}
-    
     <h2>Subir Archivo</h2>
     <div id="drop_zone">
         <div id="drop_zone_icon">📁</div>
     </div>
-    
     <div>
         <h3>Archivos en Download</h3>
         <ul>
@@ -31,7 +28,6 @@
             {% endfor %}
         </ul>
     </div>
-
     <div id="toast">Archivo recibido correctamente</div>
     <script src="{{url_for('static', filename='js/index.js')}}"></script>
 </body>

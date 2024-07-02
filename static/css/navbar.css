@@ -1,0 +1,41 @@
+.user-span{
+    width: 600px;
+}
+
+.navbar {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+}
+
+.navbar-left h1 {
+    margin: 0;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-right span {
+    margin-right: 10px;
+}
+
+.logout-button {
+    border: none;
+    font-size: 1.2em;
+    color: rgb(46, 44, 44);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.7s ease;
+    transition: color 0.7s ease;
+}
+
+.logout-button:hover {
+    color: white;
+    background-color: #333;
+}
