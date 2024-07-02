@@ -11,7 +11,7 @@ import os
 
 # app
 app = Flask(__name__, template_folder='./static/templates')
-app.secret_key = 'tu_clave_secreta_aqui'
+app.secret_key = SECRET_KEY
 
 # app-logger
 app.logger.addHandler(stream_handler)
