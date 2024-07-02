@@ -4,5 +4,6 @@ venv
 __pycache__
 logs
 download
+upload
 files
 users.json
