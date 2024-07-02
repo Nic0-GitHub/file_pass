@@ -22,7 +22,7 @@ dropZone.addEventListener('drop', function(e) {
     e.stopPropagation();
     dropZone.classList.remove('dragover');
     dropZoneIcon.textContent = '📁';
-
+    
     let files = e.dataTransfer.files;
     let formData = new FormData();
 
@@ -35,9 +35,11 @@ dropZone.addEventListener('drop', function(e) {
 
     xhr.onload = function() {
         if (xhr.status === 200) {
+            window.alert("Archivos subidos correctamente");
             showToast('Archivo recibido correctamente');
             location.reload();
         } else {
+            window.alert("Error al pasar los archivos");
             showToast('Error al subir el archivo.');
         }
     };
