@@ -20,7 +20,7 @@ app.logger.setLevel(logging.INFO)
 
 app.logger.removeHandler(default_handler)
 werkzeug_logger = logging.getLogger('werkzeug')
-werkzeug_logger.disabled = True
+
 
 # auth
 login_manager = LoginManager()
@@ -109,4 +109,6 @@ def logout():
 if __name__ == '__main__':
     port_selected = int(argv[1]) if len(argv) > 1 else 5000
     debug_mode = int(argv[2]) if len(argv) > 2 else 1
-    app.run(host='0.0.0.0', port=port_selected, debug=debug_mode)
+    host_selected = '0.0.0.0'
+    app.run(host=host_selected, port=port_selected, debug=debug_mode)
+    werkzeug_logger.disabled = True
