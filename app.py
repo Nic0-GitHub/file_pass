@@ -37,6 +37,7 @@ def info(*args, **kwargs):
 
 
 @app.route('/')
+@login_required
 def index():
     info(f"{request.remote_addr} requested: '{request.url}'({request.method})")
     try:
@@ -69,13 +70,14 @@ def upload_files():
         return redirect(url_for('index'))
     
     file = request.files['file']
+    
     if file.filename == '':
         return redirect(url_for('index'))
     
     if file:
         safe_filename = os.path.basename(file.filename)
         file.save(os.path.join(UPLOAD_DIR, safe_filename))
-        app.logger.info(f"{request.remote_addr} upload '{safe_filename}'")
+        app.logger.info(f"{request.remote_addr} uploaded '{safe_filename}'")
         return redirect(url_for('index'))
 
 @login_manager.user_loader
