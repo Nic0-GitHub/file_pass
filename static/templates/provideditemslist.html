@@ -1,0 +1,17 @@
+<ul class="file-flex" id="file-list">
+    {% for file_type, items in grouped_provided_items.items() %}
+        {% if items %}
+            <li class="file-type-section">
+                <h2>{{ file_type.name }}</h2>
+                <div class="file-buttons-container">
+                    {% for providedItem in items %}
+                    <a class="file-button" href="./download/{{ providedItem.path }}">
+                        <img class="file-icon" src="{{ url_for('static', filename='icons/' + providedItem.icon) }}" alt="{{ providedItem.name }}">
+                        {{ providedItem.name }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>

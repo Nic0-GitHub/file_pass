@@ -50,7 +50,7 @@ def index():
         grouped_provided_items = {file_type: [] for file_type in FileTypes}
         files_in_uploads = []
         
-    return render_template('index.html', grouped_provided_items=grouped_provided_items, upload_files=files_in_uploads)
+    return render_template('index.html', grouped_provided_items=grouped_provided_items, upload_files=files_in_uploads, username=current_user.username)
 
 @app.route('/download/<filename>', methods=['GET'])
 @login_required
@@ -60,7 +60,6 @@ def download_file(filename):
     if not os.path.isfile(safe_path):
         abort(404, description="Archivo no encontrado")
     return send_file(safe_path, as_attachment=True)
-
 
 @app.route('/upload', methods=['POST'])
 @login_required
@@ -89,9 +88,11 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        # gets user from users
         user = next((
             user for user in users.values() 
                 if user.username == username and user.password == password), None)
+        #
         if user:
             login_user(user)
             info(f"{request.remote_addr} started a session with user '{user.username}'")
@@ -100,7 +101,7 @@ def login():
             flash('Nombre de usuario o contraseña incorrectos', 'error')
     return render_template('login.html')
 
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
 @login_required
 def logout():
     logout_user()

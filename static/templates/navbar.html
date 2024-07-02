@@ -1,0 +1,13 @@
+<!-- navbar index.html -->
+<nav class="navbar">
+    <div class="navbar-left">
+        <h1>FILE PASS</h1>
+    </div>
+    <div class="navbar-right">
+        <span class="user-span">{{ current_user.name }}</span>
+        <form id="logout-form" action="/logout" method="POST">
+            <span>username: {{username}}</span>
+            <button type="submit" class="logout-button">Logout</button>
+        </form>
+    </div>
+</nav>

@@ -3,7 +3,7 @@ body {
     background-color: #1e1e1e;
     color: #f4f4f4;
     margin: 0;
-    padding: 20px;
+    padding: 0 20px 20px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -58,6 +58,9 @@ h1 {
     vertical-align: middle;
 }
 
+.user-span{
+    width: 600px;
+}
 
 .search-form {
     margin-top: 20px;
@@ -87,7 +90,39 @@ h1 {
     outline: none;
     border-color: #4da3ff;
 }
+.navbar {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+}
 
+.navbar-left h1 {
+    margin: 0;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-right span {
+    margin-right: 10px;
+}
+
+.logout-button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    text-decoration: underline;
+}
 #drop_zone {
     border: 2px dashed #606060;
     width: 300px;
