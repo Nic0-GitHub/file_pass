@@ -19,12 +19,21 @@ def get_users_from_json(users_file: str = USERS_FILE) -> dict:
     with open(users_file, 'r') as file:
         return json.load(file)
         
-def get_files(dir:str, with_path=False) -> list[str]:
+def get_files(dir: str, with_path=False, sort_by_birth_date=False) -> list[str]:
+    with_path_enabled = lambda f: f if not with_path else os.path.join(dir, f)
+    
     try:
-        ret = [f if not with_path else os.path.join(dir, f) for f in os.listdir(dir) if os.path.isfile(os.path.join(dir, f))]
+        paths_in_dir = os.listdir(dir)
+        files = [f for f in paths_in_dir if os.path.isfile(os.path.join(dir, f))]
+        
+        if sort_by_birth_date:
+            files.sort(key=lambda f: os.path.getctime(os.path.join(dir, f)))
+            
+        ret = [with_path_enabled(f) for f in files]
     except NotADirectoryError:
         return []
     return ret
+
 
 def group_provided_items_by_type(provided_items: list[ProvidedItem]) -> dict[FileTypes, list[ProvidedItem]]:
     grouped_items = {

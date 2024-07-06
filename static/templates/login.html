@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login - File Pass</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 </head>
 <body>
@@ -18,7 +18,7 @@
             {% endif %}
         {% endwith %}
         <form class="login-form" method="POST" action="/login">
-            <h2 class="form-title">Iniciar Sesión File-pass</h2>
+            <h2 class="form-title" style="margin-block-start: 0.2em;"> File-pass</h2>
             <div class="form-group">
                 <label for="username">Nombre de Usuario</label>
                 <input class="login-input" type="text" id="username" name="username" placeholder="Nombre de Usuario" required>

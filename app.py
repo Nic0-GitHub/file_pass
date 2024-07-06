@@ -33,30 +33,39 @@ users_json = get_users_from_json()
 users: dict[str, User] = { str(user['id']): User(**user) for user in users_json['users'] }
 groups = users_json.get('groups')
 
-def info(*args, **kwargs):
-    return app.logger.info(*args, **kwargs)
+def info_requested(*args, **kwargs):
+    return app.logger.info(f"{request.remote_addr} requested: '{request.url}' ({request.method})")
 
 
 @app.route('/')
 @login_required
 def index():
-    info(f"{request.remote_addr} requested: '{request.url}'({request.method})")
+    info_requested()
+    
     try:
-        files_in_uploads = get_files(UPLOAD_DIR)
+        files_in_uploads = get_files(UPLOAD_DIR, sort_by_birth_date=True)
         files_in_downloads = sorted(get_files(DOWNLOAD_DIR))
-        provided_items = list(map(ProvidedItem, files_in_downloads))
-        grouped_provided_items = group_provided_items_by_type(provided_items)
-        files_in_uploads.sort()
-    except FileNotFoundError:
-        grouped_provided_items = {file_type: [] for file_type in FileTypes}
-        files_in_uploads = []
         
-    return render_template('index.html', grouped_provided_items=grouped_provided_items, upload_files=files_in_uploads, username=current_user.username)
+        files_in_uploads.reverse()
+        provided_items_downloads = list(map(ProvidedItem, files_in_downloads))
+        provided_items_uploads = list(map(ProvidedItem, files_in_uploads))
+        
+        grouped_provided_items = group_provided_items_by_type(provided_items_downloads)
+    except FileNotFoundError as e:
+        app.logger.error(f"Cant map files in ProvidedItems: {e}")
+        grouped_provided_items = {file_type: [] for file_type in FileTypes}
+        provided_items_uploads = []
+        
+    return render_template('index.html', 
+                           grouped_provided_items=grouped_provided_items, 
+                           provided_items_uploads=provided_items_uploads, 
+                           username=current_user.username
+                        )
 
 @app.route('/download/<filename>', methods=['GET'])
 @login_required
 def download_file(filename):
-    info(f"{request.remote_addr} requested: '{request.url}'({request.method})")
+    info_requested()
     safe_path = os.path.join(DOWNLOAD_DIR, filename)
     if not os.path.isfile(safe_path):
         abort(404, description="Archivo no encontrado")
@@ -65,7 +74,7 @@ def download_file(filename):
 @app.route('/upload', methods=['POST'])
 @login_required
 def upload_files():
-    info(f"{request.remote_addr} requested: '{request.url}'({request.method})")
+    info_requested()
     if 'file' not in request.files:
         return redirect(url_for('index'))
     
@@ -96,7 +105,7 @@ def login():
         #
         if user:
             login_user(user)
-            info(f"{request.remote_addr} started a session with user '{user.username}'")
+            app.logger.info(f"{request.remote_addr} started a session with user '{user.username}'")
             return redirect(url_for('index'))
         else:
             flash('Nombre de usuario o contraseña incorrectos', 'error')

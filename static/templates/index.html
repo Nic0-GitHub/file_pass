@@ -23,8 +23,8 @@
     <div>
         <h3>files in download</h3>
         <ul>
-            {% for name in upload_files %}
-                <li>{{ name }}</li>
+            {% for providedItem in provided_items_uploads %}
+                <li>{{ providedItem.name }} ({{providedItem.birth_date_str}})</li>
             {% endfor %}
         </ul>
     </div>

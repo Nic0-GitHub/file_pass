@@ -1,3 +1,4 @@
+from datetime import datetime
 from pathlib import Path
 from flask_login import UserMixin
 from constants import *
@@ -24,19 +25,39 @@ class ProvidedItem():
         # assert that the file exist it self or if is in UPLOAD/DOWNLOAD DIRS
         self.path = Path(path)
         self.validate_path()
+        self.full_path = self.get_full_path()
         self.name = self.path.name
         self.raw_name = self.path.stem
+        
+        creation_timestamp = self.full_path.stat().st_ctime
+        self.birth_date = datetime.fromtimestamp(creation_timestamp)
+        self.birth_date_str = self.birth_date.strftime("%Y/%m/%d %H:%M")
+   
         self.ext = self.path.suffix
         self.file_type = self.select_file_type()
         self.icon = self.select_icon()
 
-    def validate_path(self) -> None:
+    def get_full_path(self) -> Path:
+        a = self.path
+        b = Path(DOWNLOAD_DIR) / self.path
+        c = Path(UPLOAD_DIR) / self.path
+        if (a.exists()):
+            return a
+        if (b.exists()):
+            return b
+        if (c.exists()):
+            return c       
+    def validate_path(self) -> Path:
         """ Raise FileNotFoundError if the path do not exist """
-        if not (self.path.exists() or
-                (Path(DOWNLOAD_DIR) / self.path).exists() or
-                (Path(UPLOAD_DIR) / self.path).exists()):
+        a = self.path
+        b = Path(DOWNLOAD_DIR) / self.path
+        c = Path(UPLOAD_DIR) / self.path
+        
+        if not (a.exists() or b.exists() or c.exists()):
             raise FileNotFoundError(f"El archivo no se encuentra en la ruta especificada: {self.path}")
+        
 
+        
     def select_file_type(self) -> FileTypes:
         ext_to_type = {
             '.c': FileTypes.CODE, '.py': FileTypes.CODE, '.cpp': FileTypes.CODE, 
@@ -77,10 +98,17 @@ class ProvidedItem():
         return 'default.png'
     
     def __str__(self):
-        t = f"""path: {self.path.resolve()}\nname: {self.name}\nicon: {self.icon}"""
+        t = f"""\
+        \npath: {self.path.resolve()}\
+        \nname: {self.name}\
+        \nicon: {self.icon}\
+        \nbirth_date:{self.birth_date}\
+        \nbirth_date_str:{self.birth_date_str}
+        """
         
         return t
 
 
 if __name__ == '__main__':
-    pass
+    p = ProvidedItem("./static/templates/login.html")
+    print(p)

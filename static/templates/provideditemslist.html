@@ -6,7 +6,7 @@
                 <h2>{{ file_type.name }}</h2>
                 <div class="file-buttons-container">
                     {% for providedItem in items %}
-                    <a class="file-button" href="./download/{{ providedItem.path }}">
+                    <a class="file-button" href="./download/{{ providedItem.path }}" alt="{{providedItem.name}}">
                         <img class="file-icon" src="{{ url_for('static', filename='icons/' + providedItem.icon) }}" alt="{{ providedItem.name }}">
                         {{ providedItem.name }}
                     </a>
